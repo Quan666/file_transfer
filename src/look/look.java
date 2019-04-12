@@ -7,8 +7,11 @@ import org.apache.tomcat.util.collections.SynchronizedQueue;
 
 public class look {
     public  ArrayList<String> look() throws Exception {
+    	config.config c=new config.config();
+    	c.config();
+        String DIRECTORY =c.configpath+c.uppath; 
     	ArrayList<String> all=new ArrayList<String>(); 
-        File dir = new File("/data/wwwroot/pic.myelf.club/upload"); //要遍历的目录
+        File dir = new File(DIRECTORY); //要遍历的目录
         return all=visitAllDirsAndFiles(dir);
     }
     public static ArrayList<String> visitAllDirsAndFiles(File dir) {

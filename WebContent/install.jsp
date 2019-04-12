@@ -4,27 +4,39 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>安装</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
 </head>
 <body>
 <div class="container">
   <h2>安装</h2>
-  <form>
+  <form action="install" method="post">
     <div class="form-group">
       <label for="uppath">上传目录*：</label>
-      <input type="text" class="form-control" id="uppath" placeholder="请输入绝对地址！！！">
+      <input type="text" class="form-control" name="uppath" value="upload" placeholder="如：upload">
     </div>
     <div class="form-group">
-      <label for="pwd">回收站地址*：</label>
-      <input type="text" class="form-control" id="repath" placeholder="请输入绝对地址！！！" >
+      <label for="pwd">输入域名*：</label>
+      <input type="text" class="form-control" name="link" placeholder="如：www.myelf.club" >
+    </div>
+    <div class="form-group">
+      <label for="pwd">管理员账号*：</label>
+      <input type="text" class="form-control" name="admin" placeholder="请输入字母或数字！！！" >
+    </div>
+    <div class="form-group">
+      <label for="pwd">密码*：</label>
+      <input type="password" class="form-control" name="password" placeholder="请输入字母或数字！！！" >
     </div>
     <div class="form-check">
       <label class="form-check-label">
-        <input class="form-check-input" type="checkbox"> Remember me
+        <input class="form-check-input" type="checkbox">readme
       </label>
     </div>
     <button type="submit" class="btn btn-primary">提交</button>
   </form>
 </div>
+
+
+<script src="js/bootstrap.min.js" type="text/javascript"></script>
 </body>
 </html>

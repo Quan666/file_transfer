@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+
  
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,7 +30,9 @@ public class delete extends HttpServlet {
  
     protected void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
     	// 文件存储路径
-        String DIRECTORY = "/data/wwwroot/pic.myelf.club/upload/";
+    	config.config c=new config.config();
+    	c.config();
+        String DIRECTORY =c.configpath+ c.uppath+"/";
     	DIRECTORY=DIRECTORY+new String((request.getParameter("filename")).getBytes("ISO-8859-1"),"UTF-8");
     	try{
             File file = new File(DIRECTORY);

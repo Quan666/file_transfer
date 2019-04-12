@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import config.*;
  
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,9 +23,10 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 @WebServlet("/up")
 public class up extends HttpServlet {
     private static final long serialVersionUID = 1L;
+     config c=new config();
      
-    // 上传文件存储目录
-    private static final String UPLOAD_DIRECTORY = "../upload";
+    
+    
  
     // 上传配置
     private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 3;  // 3MB
@@ -37,6 +39,11 @@ public class up extends HttpServlet {
     protected void doPost(HttpServletRequest request,
         HttpServletResponse response) throws ServletException, IOException {
         // 检测是否为多媒体上传
+    	// 上传文件存储目录
+    	
+    	c.config();
+    	String UPLOAD_DIRECTORY = "../"+c.uppath;
+    	
         if (!ServletFileUpload.isMultipartContent(request)) {
             // 如果不是则停止
             PrintWriter writer = response.getWriter();

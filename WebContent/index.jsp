@@ -3,6 +3,7 @@
     <%@page import="look.look"%>
     <%@page import="java.util.ArrayList"%>
     <%@page import="java.util.Iterator"%>
+    <%@page import="config.*"%>
 <!doctype html>
 <html lang="zh">
 <head>
@@ -121,8 +122,12 @@
             };
             return str;
         }
+        <%
+        	config c=new config();
+            c.config();
+        %>
         var qrcode = new QRCode('put', {
-            text: 'https://www.myelf.club',
+            text: '<%=c.link%>',
             width: 180,
             height: 180,
             colorDark: '#000000',
@@ -134,7 +139,7 @@
             
             var a=$(this).text();
             var id=a;
-            var link="https://pic.myelf.club/upload/"+a;
+            var link="https://<%=c.link%>/<%=c.uppath%>/"+a;
             $("#foo").attr("value",link);
             
             qrcode.clear();
