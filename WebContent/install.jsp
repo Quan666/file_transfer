@@ -16,6 +16,10 @@
       <input type="text" class="form-control" name="uppath" value="upload" placeholder="如：upload">
     </div>
     <div class="form-group">
+      <label for="max_size">上传文件大小(MB)*：</label>
+      <input type="number" class="form-control" name="max_size" value="200" placeholder="如：200">
+    </div>
+    <div class="form-group">
       <label for="pwd">输入域名*：</label>
       <input type="text" class="form-control" name="link" placeholder="如：www.myelf.club" >
     </div>

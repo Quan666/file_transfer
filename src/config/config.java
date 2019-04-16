@@ -11,7 +11,7 @@ public class config {
 	public static String admin;
 	public static String password;
 	public static String configpath;
-	
+	public static String max_size;
 	public void config() {
 		Properties con = new Properties();
 		configpath=config.class.getClassLoader().getResource("/").getPath()+"../../../";
@@ -25,6 +25,7 @@ public class config {
 		}
         uppath=con.getProperty("uppath");
         link=con.getProperty("link");
+        max_size=con.getProperty("max_size");
         admin=con.getProperty("admin");
         password=con.getProperty("password");
 	}

@@ -36,7 +36,7 @@ public class install extends HttpServlet {
     	String link=new String((request.getParameter("link")).getBytes("ISO-8859-1"),"UTF-8");
     	String admin=new String((request.getParameter("admin")).getBytes("ISO-8859-1"),"UTF-8");
     	String password=new String((request.getParameter("password")).getBytes("ISO-8859-1"),"UTF-8");
-    	
+    	String max_size=new String((request.getParameter("max_size")).getBytes("ISO-8859-1"),"UTF-8");
     	
     	Properties pro = new Properties();
 
@@ -45,6 +45,7 @@ public class install extends HttpServlet {
         pro.setProperty("link", link);
         pro.setProperty("admin", admin);
         pro.setProperty("password", password);
+        pro.setProperty("max_size", max_size);
         String configPath = request.getServletContext().getRealPath("./") + File.separator + "../config";
         File configDir = new File(configPath);
         if (!configDir.exists()) {

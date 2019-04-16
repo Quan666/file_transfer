@@ -30,7 +30,7 @@ public class up extends HttpServlet {
  
     // 上传配置
     private static final int MEMORY_THRESHOLD   = 1024 * 1024 * 3;  // 3MB
-    private static final int MAX_FILE_SIZE      = 1024 * 1024 * 200; // 200MB
+    private static final int MAX_FILE_SIZE      = 1024 * 1024 ; // 1MB
     private static final int MAX_REQUEST_SIZE   = 1024 * 1024 * 500; // 500MB
  
     /**
@@ -62,7 +62,8 @@ public class up extends HttpServlet {
         ServletFileUpload upload = new ServletFileUpload(factory);
          
         // 设置最大文件上传值
-        upload.setFileSizeMax(MAX_FILE_SIZE);
+        
+        upload.setFileSizeMax(MAX_FILE_SIZE*Integer.parseInt(c.max_size));
          
         // 设置最大请求值 (包含文件和表单数据)
         upload.setSizeMax(MAX_REQUEST_SIZE);
@@ -95,7 +96,7 @@ public class up extends HttpServlet {
                         String filePath = uploadPath + File.separator + fileName;
                         File storeFile = new File(filePath);
                         // 在控制台输出文件的上传路径
-                        System.out.println(filePath);
+                        //System.out.println(filePath);
                         // 保存文件到硬盘
                         item.write(storeFile);
                         request.setAttribute("message",

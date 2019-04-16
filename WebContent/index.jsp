@@ -4,6 +4,8 @@
     <%@page import="java.util.ArrayList"%>
     <%@page import="java.util.Iterator"%>
     <%@page import="config.*"%>
+    <%@page import="file.*"%>
+    <%@page import="java.text.SimpleDateFormat"%>
 <!doctype html>
 <html lang="zh">
 <head>
@@ -52,18 +54,22 @@
       </div>
     </div>
   </div>
-    
+        <%
+        	config c=new config();
+            c.config();
+        %>
     
 	<br><br>
+<div class="container" style="min-width:450px;">
     <center>
     	<h3>临时文件中转</h3>
     	<p>文件上传后请尽快删除！本网站不保证任何文件的安全！</p>
-    	<p>最大文件支持200MB！</p>
+    	<p>最大文件支持<%=c.max_size %>MB！</p>
     	<a href="https://www.myelf.club">@MY ELF</a>
     	<hr>
     </center>
     <br><br>
-	<article class="container">
+	<article>
 		 <div class="row">
              <div class="col-md-12 upbox">
                  <form action="up" method="post" enctype="multipart/form-data" class="text-center">
@@ -73,33 +79,56 @@
              </div>
           </div>
 	</article>
+	<br>
+	<div class="row">
+		<form action="download" method="post" class="bs-example bs-example-form" onsubmit="return url();">
+			<center><h3>离线下载</h3>(实验性功能,下载后名为“下载”,不支持文件夹下载,下载后请尽快删除！)</center>
+				<div class="input-group col-xs-12">
+					<input id="dowurl" type="text" class="form-control" name="dowlink">
+					<span class="input-group-btn">
+						<button class="btn btn-default" type="submit" value="下载" name="downame">
+							下载
+						</button>
+					</span>
+				</div><!-- /input-group -->
+			</form>
+	</div><!-- /.row -->
+</div>
+	
+	
 	<%look all=new look(); 
-	ArrayList<String> str=new ArrayList<String>(); 
+	ArrayList<file> str=new ArrayList<file>(); 
 	str=all.look();
-	Iterator<String> astr=str.iterator();
+	Iterator<file> astr=str.iterator();
+	SimpleDateFormat ft = new SimpleDateFormat ("yyyy-MM-dd HH:MM");
 	%>
-	<div class="container">      
-      <table class="table table-hover">
+	<div class="container table-responsive" style="min-width:450px;">      
+      <table class="table table-hover table-condensed">
       <h2>文件列表</h2>
         <thead>
           <tr>
-            <th width="90%">文件名</th>
+            <th width="60%">文件名</th>
+            <th width="8%"></th>
+            <th width="10%"></th>
             <th style="text-align: center" width="5%"></th>
             <th width="5%"></th>
           </tr>
         </thead>
         <tbody>
-        <%while(astr.hasNext()){String ss=astr.next();%>
+        <%while(astr.hasNext()){file ss=astr.next();%>
           <tr>
-            <td style="font-size: 16px;padding-top: 15px"><a href="#" data-toggle="modal" data-target="#myModal" class="qrcode" title="点击获取二维码"><%=ss %></a></td>
-            <td style="text-align: center"><a href="<%="../upload/"+ss%>" download style="text-align: center" class="btn-custom green">下载</a></td>
+            <td style="font-size: 16px;padding-top: 12px"><a href="#" data-toggle="modal" data-target="#myModal" class="qrcode" title="点击获取二维码"><%=ss.name%></a></td>
+            <td style="font-size: 12px;padding-top: 15px"><%=ss.size%></td>
+            <td style="font-size: 12px;padding-top: 15px"><%=ft.format(ss.time)%></td>
+            <td style="text-align: center"><a href="<%="../upload/"+ss.name%>" download style="text-align: center" class="btn-custom green">下载</a></td>
             <td style="text-align: center">
             	<form action="delete" method="post" class="text-center">
-                <button type="submit" name="filename" class="btn-custom red" style="text-align: center" value="<%=ss%>">删除</button>
+                <button type="submit" name="filename" class="btn-custom red" style="text-align: center" value="<%=ss.name%>">删除</button>
                 </form>
             </td>
           </tr>
           <%} %>
+          
         </tbody>
       </table>
     </div>
@@ -122,10 +151,12 @@
             };
             return str;
         }
-        <%
-        	config c=new config();
-            c.config();
-        %>
+        function url(){
+            var url=document.getElementById("dowurl").value;
+            url=ChangeUrl(url);
+            document.getElementById("dowurl").value=url;
+            return true;
+        }
         var qrcode = new QRCode('put', {
             text: '<%=c.link%>',
             width: 180,
@@ -138,7 +169,6 @@
           $(".qrcode").click(function(){
             
             var a=$(this).text();
-            var id=a;
             var link="https://<%=c.link%>/<%=c.uppath%>/"+a;
             $("#foo").attr("value",link);
             
