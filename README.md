@@ -5,7 +5,7 @@
 [临时文件中转](https://pic.myelf.club/up/index.jsp "临时文件中转")
 
 
-#### 环境
+### 环境
 开发环境
  - window 10
  - Java jdk1.8
@@ -19,6 +19,16 @@
  - Linux centos 7
  - Java jdk1.8
  - Tomcat 9.0
+
+### 更新
+#### 1.1.0 
+ 增加二维码分享功能
+#### 1.2.0 
+ 增加安装页面
+ 可以自定义上传文件目录
+ 增加配置文件config.xml
+
+
 
 
 [@MY ELF](http://myelf.club "@MY ELF")
