@@ -1,12 +1,20 @@
 package up;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.PasswordAuthentication;
 import java.util.List;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import config.*;
  
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +29,7 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  * Servlet implementation class up
  */
 @WebServlet("/up")
+@MultipartConfig
 public class up extends HttpServlet {
     private static final long serialVersionUID = 1L;
      config c=new config();
@@ -36,6 +45,7 @@ public class up extends HttpServlet {
     /**
      * 上传数据及保存文件
      */
+    
     protected void doPost(HttpServletRequest request,
         HttpServletResponse response) throws ServletException, IOException {
         // 检测是否为多媒体上传
@@ -81,7 +91,11 @@ public class up extends HttpServlet {
         if (!uploadDir.exists()) {
             uploadDir.mkdir();
         }
- 
+        
+        
+        
+        
+        
         try {
             // 解析请求的内容提取文件数据
             @SuppressWarnings("/unchecked")
@@ -93,10 +107,37 @@ public class up extends HttpServlet {
                     // 处理不在表单中的字段
                     if (!item.isFormField()) {
                         String fileName = new File(item.getName()).getName();
+                        
+                        //fileName=fileName.replace(" ", "");//去掉空格
+                        fileName=removeSpecialcharacter(fileName);
+                        
                         String filePath = uploadPath + File.separator + fileName;
                         File storeFile = new File(filePath);
                         // 在控制台输出文件的上传路径
                         //System.out.println(filePath);
+                        String password="";
+                        // password文件的存储
+                        try {
+                        	Properties pro = new Properties();
+                        	String configPath = request.getServletContext().getRealPath("./") + File.separator + "../config";
+                        	//System.out.println(configPath);
+                        	password=new String((request.getParameter("password")).getBytes("ISO-8859-1"),"UTF-8");
+                        	//pro.loadFromXML(new FileInputStream(configPath+"/password.xml"));
+                            pro.setProperty(fileName, password);
+                            File configDir = new File(configPath);
+                            if (!configDir.exists()) {
+                                configDir.mkdir();
+                            }
+                            // password
+                            pro.storeToXML(new FileOutputStream(new File(configPath+"/password.xml")), "passwordfile");
+                            //Properties red = new Properties();
+                            //red.loadFromXML(new FileInputStream(configPath+"/password.xml"));
+                		} catch (Exception e) {
+                			
+                			System.out.println(e);
+                			System.out.println(fileName+password+"@");
+                		}
+                        
                         // 保存文件到硬盘
                         item.write(storeFile);
                         request.setAttribute("message",
@@ -105,11 +146,27 @@ public class up extends HttpServlet {
                 }
             }
         } catch (Exception ex) {
-            request.setAttribute("message",
-                    "错误信息: " + ex.getMessage());
+        	request.setAttribute("message","上传出错！" );
+            request.setAttribute("message","错误信息: " + ex.getMessage());//调试
         }
         // 跳转到 message.jsp
         request.getServletContext().getRequestDispatcher("/message.jsp").forward(
                 request, response);
+    }
+    
+    
+    public static String removeSpecialcharacter(String filename){
+    	Pattern pattern=Pattern.compile("[\u4e00-\u9fa5]");//中文汉字编码区间  
+        Matcher matcher;
+        char[] array = filename.toCharArray();
+        for (int i = 0; i < array.length; i++) {
+             if((char)(byte)array[i]!=array[i]){//取出双字节字符
+            	 matcher=pattern.matcher(String.valueOf(array[i]));
+                    if(!matcher.matches()){//中文汉字无需替换
+                        filename=filename.replaceAll(String.valueOf(array[i]), "");//特殊字符用空字符串替换
+                   }
+             }
+        }
+           return filename;
     }
 }

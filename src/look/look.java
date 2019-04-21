@@ -1,9 +1,12 @@
 package look;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Properties;
 
 import org.apache.tomcat.util.collections.SynchronizedQueue;
 
@@ -28,8 +31,20 @@ public class look {
                 Long lastModified = file.lastModified();
                 Date date = new Date(lastModified);
                 //密码
-                
-            	all.add(new file(""+children[i],longToString(file.length()),date,""));
+                config.config c=new config.config();
+            	c.config();
+            	String ptag = "0";
+                Properties red = new Properties();
+                try {
+					red.loadFromXML(new FileInputStream(c.configpath+"config/password.xml"));
+					if(red.getProperty(""+children[i]) != null) {//
+						ptag="1";
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            	all.add(new file(""+children[i],longToString(file.length()),date,ptag));
             }
         }
 		return all;
@@ -50,7 +65,7 @@ public class look {
             ret = df.format(size/(mb*1.0)) + " MB";
         }else if(size >= kb){
             ret = df.format(size/(kb*1.0)) + " KB";
-        }else if(size > 0){
+        }else if(size >= 0){
             ret = df.format(size/(1.0)) + " Byte";
         }
          

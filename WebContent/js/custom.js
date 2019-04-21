@@ -77,7 +77,7 @@ $(document).ready(function(){
                 error: function(el){
                     var parent = el.find(".jFiler-jProgressBar").parent();
                     el.find(".jFiler-jProgressBar").fadeOut("slow", function(){
-                        $("<div class=\"jFiler-item-others text-error\"><i class=\"icon-jfi-minus-circle\"></i> Error</div>").hide().appendTo(parent).fadeIn("slow");    
+                        $("<div class=\"jFiler-item-others text-success\"><i class=\"icon-jfi-check-circle\"></i> Success</div>").hide().appendTo(parent).fadeIn("slow");    
                     });
                 },
                 statusCode: null,
@@ -160,15 +160,7 @@ $(document).ready(function(){
         uploadFile: filer_default_opts.uploadFile
     });
 
-    $('#demo-fileInput-2').filer();
-
-    $('#demo-fileInput-3').filer({
-        limit: 3,
-        maxSize: 3,
-        extensions: ['jpg', 'jpeg', 'png', 'gif'],
-        changeInput: true,
-        showThumbs: true
-    });
+    
 
     $('#demo-fileInput-4').filer({
         changeInput: '<div class="jFiler-input-dragDrop"><div class="jFiler-input-inner"><div class="jFiler-input-icon"><i class="icon-jfi-folder"></i></div><div class="jFiler-input-text"><h3>Click on this box</h3> <span style="display:inline-block; margin: 15px 0">or</span></div><a class="jFiler-input-choose-btn blue-light">Browse Files</a></div></div>',
@@ -177,13 +169,7 @@ $(document).ready(function(){
         templates: filer_default_opts.templates
     });
 
-    $('#demo-fileInput-5').filer({
-        limit: 3,
-        maxSize: 3,
-        extensions: ['jpg', 'jpeg', 'png', 'gif'],
-        showThumbs: true,
-        addMore: true
-    });
+    
 
     $('#demo-fileInput-6').filer({
         changeInput: filer_default_opts.changeInput2,
@@ -196,29 +182,6 @@ $(document).ready(function(){
         onRemove: filer_default_opts.onRemove
     });
 
-    $('#demo-fileInput-7').filer({
-        showThumbs: true,
-        templates: filer_default_opts.templates,
-        uploadFile: filer_default_opts.uploadFile
-    });
+   
 
-    $('#demo-fileInput-8').filer({
-        showThumbs: true,
-        templates: filer_default_opts.templates,
-        addMore: true,
-        files: [
-            {
-                name: "appended_file.jpg",
-                size: 5453,
-                type: "image/jpg",
-                file: "http://dummyimage.com/720x480/f9f9f9/191a1a.jpg"
-            },
-            {
-                name: "appended_file_2.jpg",
-                size: 9453,
-                type: "image/jpg",
-                file: "http://dummyimage.com/640x480/f9f9f9/191a1a.jpg"
-            }
-        ]
-    });
 });

@@ -33,17 +33,29 @@ public class download extends HttpServlet {
     	try{
             dow dow=new dow(url,DIRECTORY,name);
             dow.download();
-            request.setAttribute("message",name + "离线下载任务添加成功！请过段时间再来下载！视文件大小而定！");
+            this.getServletContext().setAttribute("message",name + "<div class=\"alert alert-success alert-dismissable\">\r\n" + 
+            		"	<button type=\"button\" class=\"close\" data-dismiss=\"alert\"\r\n" + 
+            		"			aria-hidden=\"true\">\r\n" + 
+            		"		&times;\r\n" + 
+            		"	</button>\r\n" + 
+            		"	<center>离线下载任务添加成功！请过段时间再来下载！视文件大小而定！</center>\r\n" + 
+            		"</div>");
         }catch(Exception e){
             e.printStackTrace();
-            request.setAttribute("message",name + "文件下载失败！");
+            this.getServletContext().setAttribute("message",name + "<div class=\"alert alert-danger alert-dismissable\">\r\n" + 
+            		"	<button type=\"button\" class=\"close\" data-dismiss=\"alert\"\r\n" + 
+            		"			aria-hidden=\"true\">\r\n" + 
+            		"		&times;\r\n" + 
+            		"	</button>\r\n" + 
+            		"	<center>文件下载失败！</center>\r\n" + 
+            		"</div>");
         }
     	
     	
     	
     	
         // 跳转到 message.jsp
-        request.getServletContext().getRequestDispatcher("/message.jsp").forward(
-                request, response);
+        //request.getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
+    	response.sendRedirect("index.jsp");
     }
 }

@@ -27,7 +27,8 @@
         .link_p{
             margin-top: 10px;
         }
-    
+        #info{
+        margin-bottom:5px;}
     </style>
 </head>
 <body>
@@ -54,6 +55,43 @@
       </div>
     </div>
   </div>
+  
+  
+  
+  <!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+            <form action="" method="post" name="formhp" id="formhp">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" 
+						aria-hidden="true">×
+				</button>
+				<h4 class="modal-title" id="htmlh">
+					
+				</h4>
+			</div>
+			<div class="modal-body" id="htmlp">
+				<p>设置密码：</p><center><input type="password" class="form-control" name="password" required="required" form="formhp" placeholder="请输入密码"></center>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" 
+						data-dismiss="modal">取消
+				</button>
+				<button type="submit" class="btn-custom red" id="delbtn">
+					确定
+				</button>
+			</div>
+            </form>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+  
+  
+  
+  
+  
+
         <%
         	config c=new config();
             c.config();
@@ -68,13 +106,14 @@
     	<a href="https://www.myelf.club">@MY ELF</a>
     	<hr>
     </center>
-    <br><br>
+    <br><%if(null!=application.getAttribute("message")){%><%=application.getAttribute("message")%><%} %><br>
 	<article>
 		 <div class="row">
              <div class="col-md-12 upbox">
-                 <form action="up" method="post" enctype="multipart/form-data" class="text-center">
-                     <input type="file" name="files[]" id="demo-fileInput-4" multiple="multiple">
-                     <input type="submit" class="btn-custom green" value="上传">
+                 <form action="upfiles" method="post" enctype="multipart/form-data" class="text-center" id="upfiles">
+                     <input type="file" name="files[]" id="demo-fileInput-4" multiple="multiple" required="required">
+                     <button type="submit" class="btn-custom green" value="" name="password" onClick="check()">上传</button>
+                     <input type="button" class="btn-custom orange" value="加密"  onClick="upfiles();">
                  </form>
              </div>
           </div>
@@ -82,9 +121,9 @@
 	<br>
 	<div class="row">
 		<form action="download" method="post" class="bs-example bs-example-form" onsubmit="return url();">
-			<center><h3>离线下载</h3>(实验性功能,下载后名为“下载”,不支持文件夹下载,下载后请尽快删除！)</center>
+			<center id="info"><h3>离线下载</h3>(实验性功能,下载后名为“下载”,不支持文件夹下载,下载后请尽快删除！)</center>
 				<div class="input-group col-xs-12">
-					<input id="dowurl" type="text" class="form-control" name="dowlink">
+					<input id="dowurl" type="text" class="form-control" name="dowlink"  required="required">
 					<span class="input-group-btn">
 						<button class="btn btn-default" type="submit" value="下载" name="downame">
 							下载
@@ -94,7 +133,7 @@
 			</form>
 	</div><!-- /.row -->
 </div>
-	
+
 	
 	<%look all=new look(); 
 	ArrayList<file> str=new ArrayList<file>(); 
@@ -108,7 +147,7 @@
         <thead>
           <tr>
             <th width="60%">文件名</th>
-            <th width="8%"></th>
+            <th width="10%"></th>
             <th width="10%"></th>
             <th style="text-align: center" width="5%"></th>
             <th width="5%"></th>
@@ -122,9 +161,7 @@
             <td style="font-size: 12px;padding-top: 15px"><%=ft.format(ss.time)%></td>
             <td style="text-align: center"><a href="<%="../upload/"+ss.name%>" download style="text-align: center" class="btn-custom green">下载</a></td>
             <td style="text-align: center">
-            	<form action="delete" method="post" class="text-center">
-                <button type="submit" name="filename" class="btn-custom red" style="text-align: center" value="<%=ss.name%>">删除</button>
-                </form>
+                <button  class="btn-custom red" style="text-align: center;" onclick="deles('<%=ss.name%>',<%=ss.password%>)" data-toggle="modal" data-target="#myModal2">删除</button>
             </td>
           </tr>
           <%} %>
@@ -143,7 +180,62 @@
     <script src="./QRCode_files/modernizr-2.8.3.js" type="text/javascript"></script>
         <script src="js/clipboard.min.js"></script>
     <script type="text/javascript">
-        //判断是否为网址并将其中的中文转码
+    	function isPasswd(){  
+    		var s=document.getElementById("pw").value;
+    		var patrn=/^(\w){3,10}$/;  //3-10个字母、数字或下划线
+    		if (!patrn.exec(s)) {
+    			alert("密码不规范！请输入3-10个字母、数字或下划线！");
+    			document.getElementById("pw").value="";
+    			return false;
+    		}
+    		return true
+    	}
+        
+        function deles(filename,ptag){
+        	var htmlh="删除文件“"+filename+"”";
+        	var htmlp="";
+        	if(ptag==0){
+        		htmlp="<center><h4 style=\"color:red\">确定永久删除文件？</h4></center>";
+        	}
+        	else {
+        		htmlp="<input type=\"password\" class=\"form-control\" name=\"password\" required=\"required\" placeholder=\"请输入密码\">"
+        	}
+        	document.getElementById("htmlh").innerHTML=htmlh;
+        	document.getElementById("htmlp").innerHTML=htmlp;
+            document.getElementById("delbtn").value=filename;
+            document.getElementById("delbtn").setAttribute('name','filename');
+            document.formhp.action="delete";
+        }
+        
+        function check(){
+            if(document.querySelector("input[type=file]").files.length==0){
+                alert("请选择文件！");
+                return false;
+            }
+        }
+        
+        
+        function upfiles(){
+            if(document.querySelector("input[type=file]").files.length==0){
+                alert("请选择文件！");
+                return false;
+            }
+            else if(!document.querySelector("input[type=file]").files.length==0){
+                var htmlh="上传文件:";
+                var htmlp="";
+                htmlp="<p>设置密码(3-10个字母、数字或下划线)：</p><center><input type=\"password\" onchange=\"isPasswd()\" id=\"pw\" class=\"form-control\" name=\"password\" required=\"required\" form=\"formhp\" placeholder=\"请输入密码\"></center>"
+                document.getElementById("htmlh").innerHTML=htmlh;
+                document.getElementById("htmlp").innerHTML=htmlp;
+                document.getElementById("formhp").setAttribute('onsubmit',' return isPasswd();');
+                document.formhp.setAttribute('enctype','multipart/form-data');
+                document.getElementById("demo-fileInput-4").setAttribute('form','formhp');
+                document.formhp.action="upfiles";
+                $('#myModal2').modal('show');
+            }
+        }
+        
+        
+      //判断是否为网址并将其中的中文转码
         function ChangeUrl(str){
             var patt = new RegExp("http[s]?://");
             if(patt.test(str)){
@@ -166,6 +258,7 @@
             correctLevel: QRCode.CorrectLevel.H
         });
         $(document).ready(function(){
+            
           $(".qrcode").click(function(){
             
             var a=$(this).text();

@@ -39,7 +39,7 @@ public class install extends HttpServlet {
     	String max_size=new String((request.getParameter("max_size")).getBytes("ISO-8859-1"),"UTF-8");
     	
     	Properties pro = new Properties();
-
+    	Properties pd = new Properties();
         // 资源配置文件的存储
         pro.setProperty("uppath", uppath);
         pro.setProperty("link", link);
@@ -47,6 +47,7 @@ public class install extends HttpServlet {
         pro.setProperty("password", password);
         pro.setProperty("max_size", max_size);
         String configPath = request.getServletContext().getRealPath("./") + File.separator + "../config";
+        
         File configDir = new File(configPath);
         if (!configDir.exists()) {
             configDir.mkdir();
@@ -54,6 +55,7 @@ public class install extends HttpServlet {
         // 资源配置文件的输出
         //pro.store(new FileOutputStream(new File("config.properties")), "配置文件");
         pro.storeToXML(new FileOutputStream(new File(configPath+"/config.xml")), "配置文件");
+        pd.storeToXML(new FileOutputStream(new File(configPath+"/password.xml")), "password");
         Properties red = new Properties();
         //red.load(new FileReader("config.properties"));
         red.loadFromXML(new FileInputStream(configPath+"/config.xml"));
