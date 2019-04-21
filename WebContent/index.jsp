@@ -106,7 +106,7 @@
     	<a href="https://www.myelf.club">@MY ELF</a>
     	<hr>
     </center>
-    <br><%if(null!=application.getAttribute("message")){%><%=application.getAttribute("message")%><%} %><br>
+    <br><%if(null!=application.getAttribute("message")){%><%=application.getAttribute("message")%><%}application.setAttribute("message",null); %><br>
 	<article>
 		 <div class="row">
              <div class="col-md-12 upbox">
