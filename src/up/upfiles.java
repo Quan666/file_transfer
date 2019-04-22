@@ -50,7 +50,7 @@ public class upfiles extends HttpServlet {
     	c.config();
     	String UPLOAD_DIRECTORY = "../"+c.uppath;
     	String fileName="";
-    	
+    	String fileNames="";
         String password=""; 
         try {
 			password=request.getParameter("password");
@@ -79,9 +79,16 @@ public class upfiles extends HttpServlet {
             		String fn = headerInfo.substring(headerInfo.lastIndexOf("=") + 2, headerInfo.length() - 1);
             		if("password".equals(fn))continue;
             		fileName=fn;
+            		fileNames=fileNames+fileName+" ";
             		fileName=removeSpecialcharacter(fileName);
             		if(part.getSize()>=MAX_FILE_SIZE*Integer.parseInt(c.max_size)) {
-            			request.setAttribute("message","文件超出"+c.max_size+"MB!无法上传！");
+            			this.getServletContext().setAttribute("message","<div class=\"alert alert-danger alert-dismissable\">\r\n" + 
+            					"	<button type=\"button\" class=\"close\" data-dismiss=\"alert\"\r\n" + 
+            					"			aria-hidden=\"true\">\r\n" + 
+            					"		&times;\r\n" + 
+            					"	</button>\r\n" + 
+            					"	<center>文件“"+fileName+"”超过"+c.max_size+"MB!无法上传！</center>\r\n" + 
+            					"</div>");
             			e=false;
             			break;
             		}
@@ -129,7 +136,7 @@ public class upfiles extends HttpServlet {
         				"			aria-hidden=\"true\">\r\n" + 
         				"		&times;\r\n" + 
         				"	</button>\r\n" + 
-        				"	<center>文件“"+fileName+"”上传成功！</center>\r\n" + 
+        				"	<center>文件“"+fileNames+"”上传成功！</center>\r\n" + 
         				"</div>" );
             } catch (Exception ex) {
             	this.getServletContext().setAttribute("message","<div class=\"alert alert-danger alert-dismissable\">\r\n" + 

@@ -106,13 +106,13 @@
     	<a href="https://www.myelf.club">@MY ELF</a>
     	<hr>
     </center>
-    <br><%if(null!=application.getAttribute("message")){%><%=application.getAttribute("message")%><%}application.setAttribute("message",null); %><br>
+    <br><div id="reinfo"><%if(null!=application.getAttribute("message")){%><%=application.getAttribute("message")%><%}application.setAttribute("message",null); %></div><br>
 	<article>
 		 <div class="row">
              <div class="col-md-12 upbox">
-                 <form action="upfiles" method="post" enctype="multipart/form-data" class="text-center" id="upfiles">
+                 <form action="upfiles" method="post" enctype="multipart/form-data" class="text-center" id="upfiles" onSubmit="return check()">
                      <input type="file" name="files[]" id="demo-fileInput-4" multiple="multiple" required="required">
-                     <button type="submit" class="btn-custom green" value="" name="password" onClick="check()">上传</button>
+                     <button type="submit" class="btn-custom green" value="" name="password" onClick="check();">上传</button>
                      <input type="button" class="btn-custom orange" value="加密"  onClick="upfiles();">
                  </form>
              </div>
@@ -180,6 +180,42 @@
     <script src="./QRCode_files/modernizr-2.8.3.js" type="text/javascript"></script>
         <script src="js/clipboard.min.js"></script>
     <script type="text/javascript">
+    	function file_size() {
+       	 	var f = document.querySelector("input[type=file]").files;
+       	 
+        	//上次修改时间
+       		//alert(f[0].lastModifiedDate);
+        	//名称
+       	 	//alert(f[0].name);
+        	//大小 字节
+       		//alert(f[0].size);
+        	var str="";
+        	var tag=0;
+        	for(var i=0;i<f.length;i++){
+        		if(f[i].size>=<%=c.max_size%>*1024*1024){
+        			str=str+f[i].name+" ,";
+        			tag++;
+        		}
+        	}
+        	str=str.substring(0,str.length-1);
+        	
+        	//类型
+      		//alert(f[0].type);
+        	if(tag>0){
+    			var htmlp="<div class=\"alert alert-danger alert-dismissable\">\r\n" + 
+				"	<button type=\"button\" class=\"close\" data-dismiss=\"alert\"\r\n" + 
+				"			aria-hidden=\"true\">\r\n" + 
+				"		&times;\r\n" + 
+				"	</button>\r\n" + 
+				"	<center>文件“"+str+"”超过<%=c.max_size%>MB!无法上传！</center>\r\n" + 
+				"</div>";
+    			document.getElementById("reinfo").innerHTML=htmlp;
+    			htmlp="";
+    			return false;
+    		}
+        	return true;
+    	 }
+
     	function isPasswd(){  
     		var s=document.getElementById("pw").value;
     		var patrn=/^(\w){3,10}$/;  //3-10个字母、数字或下划线
@@ -188,7 +224,10 @@
     			document.getElementById("pw").value="";
     			return false;
     		}
-    		return true
+    		$('#myModal2').modal('hide');
+    		document.getElementById("formhp").submit();
+    		return true;
+    		
     	}
         
         function deles(filename,ptag){
@@ -205,6 +244,7 @@
             document.getElementById("delbtn").value=filename;
             document.getElementById("delbtn").setAttribute('name','filename');
             document.formhp.action="delete";
+            $('#myModal2').modal('hide');
         }
         
         function check(){
@@ -212,6 +252,9 @@
                 alert("请选择文件！");
                 return false;
             }
+            if(!file_size())return false;
+            //document.getElementById("upfiles").submit();
+            
         }
         
         
@@ -220,6 +263,7 @@
                 alert("请选择文件！");
                 return false;
             }
+            if(!file_size())return false;
             else if(!document.querySelector("input[type=file]").files.length==0){
                 var htmlh="上传文件:";
                 var htmlp="";

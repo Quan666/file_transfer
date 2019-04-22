@@ -55,12 +55,12 @@ public class delete extends HttpServlet {
     	try{
     		File file = new File(DIRECTORY);
     		if(!inpassword.equals(password)){
-    			this.getServletContext().setAttribute("message",file.getName() + "<div class=\"alert alert-danger alert-dismissable\">\r\n" + 
+    			this.getServletContext().setAttribute("message", "<div class=\"alert alert-danger alert-dismissable\">\r\n" + 
             			"	<button type=\"button\" class=\"close\" data-dismiss=\"alert\"\r\n" + 
             			"			aria-hidden=\"true\">\r\n" + 
             			"		&times;\r\n" + 
             			"	</button>\r\n" + 
-            			"	<center> 文件删除失败！密码错误！！！</center>\r\n" + 
+            			"	<center> 文件“"+file.getName() + "”删除失败！密码错误！！！</center>\r\n" + 
             			"</div>");
             }
     		if(inpassword.equals(password)) {

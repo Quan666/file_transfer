@@ -33,21 +33,21 @@ public class download extends HttpServlet {
     	try{
             dow dow=new dow(url,DIRECTORY,name);
             dow.download();
-            this.getServletContext().setAttribute("message",name + "<div class=\"alert alert-success alert-dismissable\">\r\n" + 
+            this.getServletContext().setAttribute("message","<div class=\"alert alert-success alert-dismissable\">\r\n" + 
             		"	<button type=\"button\" class=\"close\" data-dismiss=\"alert\"\r\n" + 
             		"			aria-hidden=\"true\">\r\n" + 
             		"		&times;\r\n" + 
             		"	</button>\r\n" + 
-            		"	<center>离线下载任务添加成功！请过段时间再来下载！视文件大小而定！</center>\r\n" + 
+            		"	<center>“"+name + "”离线下载任务添加成功！请过段时间再来下载！视文件大小而定！</center>\r\n" + 
             		"</div>");
         }catch(Exception e){
             e.printStackTrace();
-            this.getServletContext().setAttribute("message",name + "<div class=\"alert alert-danger alert-dismissable\">\r\n" + 
+            this.getServletContext().setAttribute("message","<div class=\"alert alert-danger alert-dismissable\">\r\n" + 
             		"	<button type=\"button\" class=\"close\" data-dismiss=\"alert\"\r\n" + 
             		"			aria-hidden=\"true\">\r\n" + 
             		"		&times;\r\n" + 
             		"	</button>\r\n" + 
-            		"	<center>文件下载失败！</center>\r\n" + 
+            		"	<center>文件“"+name+ "”下载失败！</center>\r\n" + 
             		"</div>");
         }
     	
